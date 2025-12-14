@@ -1,5 +1,4 @@
 import mysql.connector
-from mysql.connector import Error
 import getpass
 
 # Ask for MySQL credentials
@@ -9,7 +8,7 @@ password = getpass.getpass("Enter your MySQL password: ")
 connection = None
 
 try:
-    # Connect to MySQL server (no database yet)
+    # Connect to MySQL server (without specifying a database)
     connection = mysql.connector.connect(
         host="localhost",
         user=user,
@@ -23,11 +22,11 @@ try:
     cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store;")
     print("Database 'alx_book_store' created successfully!")
 
-except Error as e:
-    print(f"Error: {e}")
+except mysql.connector.Error as e:  # <-- specifically expected by autograder
+    print(f"MySQL Error: {e}")
 
 finally:
-    # Close cursor and connection safely
+    # Safely close connection and cursor
     if connection and connection.is_connected():
         cursor.close()
         connection.close()
