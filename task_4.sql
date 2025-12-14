@@ -7,6 +7,6 @@ SELECT
     COLUMN_DEFAULT AS 'Default',
     EXTRA AS 'Extra'
 FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_SCHEMA = DATABASE()  -- uses the database passed as argument
+WHERE TABLE_SCHEMA = 'alx_book_store'  -- explicitly specify database
   AND TABLE_NAME = 'Books'
 ORDER BY ORDINAL_POSITION;
