@@ -1,34 +1,34 @@
 import mysql.connector
 from mysql.connector import Error
+import getpass
 
-# Path to your SQL file
-sql_file = "alx_book_store.sql"
+# Ask for MySQL credentials
+user = input("Enter your MySQL username: ")
+password = getpass.getpass("Enter your MySQL password: ")
+
+connection = None
 
 try:
-    # Connect to MySQL server (without specifying a database)
+    # Connect to MySQL server (no database yet)
     connection = mysql.connector.connect(
         host="localhost",
-        user="root",        # Replace with your MySQL username
-        password="password" # Replace with your MySQL password
+        user=user,
+        password=password,
+        port=3307  # your MySQL port
     )
+
     cursor = connection.cursor()
 
-    # Read SQL file
-    with open(sql_file, "r") as file:
-        sql_commands = file.read().split(';')  # Split commands by semicolon
-
-    # Execute each SQL command
-    for command in sql_commands:
-        command = command.strip()
-        if command:  # Skip empty lines
-            cursor.execute(command)
-    
-    print("Database 'alx_book_store' and tables created successfully!")
+    # Create database safely
+    cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store;")
+    print("Database 'alx_book_store' created successfully!")
 
 except Error as e:
     print(f"Error: {e}")
 
 finally:
-    if connection.is_connected():
+    # Close cursor and connection safely
+    if connection and connection.is_connected():
         cursor.close()
         connection.close()
+        print("MySQL connection closed.")
